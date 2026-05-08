@@ -1,13 +1,49 @@
 # 2026-1-BDA
 2026년 1학기 '빅데이터분석프로그래밍' 교과목
 
+## 교재
+- 주교재
+  - 파이썬으로 배우는 데이터분석 입문, 강환수 저, 도서출판 홍릉
+  - https://product.kyobobook.co.kr/detail/S000214156345
+
+    > <img width="458" height="629" alt="image" src="https://github.com/user-attachments/assets/6913e3ab-5ed9-422e-b36e-9453c16e2f4e" />
+
+- 보조교재
+  - Do It 쉽게 배우는 파이썬 데이터분석, 김영우 저, 이지퍼블리싱 
+
+---
+
+## 수업 일정
+| 주차 | 일자         | 요일  | 교재      | 주제        | 원일자        | 비고     |
+| -- | ---------- | --- | ------- | --------- | ---------- | ------ |
+| 1  | 2026-03-04 | 수요일 | 1장      |           |            |        |
+| 2  | 2026-03-11 | 수요일 | 2장      |           |            |        |
+| 3  | 2026-03-18 | 수요일 | 3장      |           |            |        |
+| 4  | 2026-03-25 | 수요일 | 4장      |           |            |        |
+| 5  | 2026-04-01 | 수요일 | 5~6장    |           |            |        |
+| 6  | 2026-04-08 | 수요일 | 6~7장    |           |            |        |
+| 7  | 2026-04-15 | 수요일 | 7~8장    |           |            |        |
+| 8  | 2026-04-22 | 수요일 |         | 중간고사      |            |        |
+| 9  | 2026-04-29 | 수요일 | 9장      | 데이터시각화 1  |            |        |
+| 10 | 2026-05-06 | 수요일 | 9장      | 데이터시각화 2  |            |        |
+| 11 | 2026-05-13 | 수요일 | 보조교재 6장 | 그룹화와 집계함수 |            |        |
+| **12** | **2026-06-04** | **목요일** | Cookbook | Pandas 레시피 | 2026-05-20 | 원격 수업(동영상 시청) |
+| 13 | 2026-05-27 | 수요일 |         | 과제발표      |            |        |
+| 14 | 2026-06-10 | 수요일 | 보조교재 7장 | 결측값과 이상값  | 2026-06-03 |        |
+| 15 | 2026-06-17 | 수요일 |         | 기말고사      |            |        |
+
+
 ## 온라인 출석과 수업 참여
 - [A반(QA) 수요일 오전](https://docs.google.com/spreadsheets/d/1D6ayWWOMeVnYbkdMYzPTb6pRjdNcvLFk4VPmn_ylpus/edit?usp=sharing)
 - [B반(QB) 수요일 오후](https://docs.google.com/spreadsheets/d/1eSEnDMEoiSUiUgyeKz_xyt1tmn8EPJ3cRPKXZdKE7i4/edit?usp=sharing)
 
-## 시험 일정
-- 중간고사 2026/4/22수 오후 3시
-- 기말고사 2026/6/17수 오후 3시
+## 시험 일정과 점수
+- 중간고사
+  - [QA 2026/4/22수 오전 11:00 ~ 11:50 6-406호](https://claude.ai/artifacts/latest/3c19a0fb-ec76-4a1c-b993-26b5f3806dcc)
+  - QB 2026/4/22수 오후 14:00 ~ 14:50 6-406호
+- 기말고사
+  - QA 2026/6/17수 오후 12:00 ~ 12:50 
+  - QB 2026/6/17수 오후 14:00 ~ 14:50 
 
 ## 타이타닉 열(변수) 설명
 - survived : 0 = 사망, 1 = 생존
@@ -41,7 +77,7 @@
 ## 지도 시각화 수업 참조
 - [웹참조](https://pjh09050.tistory.com/11)
   
-## 가로로 데이터프레임 출력 함수
+## 가로로 여러 데이터프레임 출력 함수
 ```Python
 from IPython.display import display_html
 def display_side_by_side(*args):
@@ -51,6 +87,38 @@ def display_side_by_side(*args):
         html_str += df.to_html() + '&nbsp;'*4
     display_html(html_str.replace('table','table style="display:inline"'), raw=True)
 ```
+
+## 가로로 여러 시리즈 출력 함수
+```Python
+from IPython.display import display_html
+
+def display_series_side_by_side(*args, names=None):
+    """여러 Series를 옆으로 나란히 표시한다.
+    
+    Parameters
+    ----------
+    *args   : pd.Series 객체들
+    names   : 각 Series의 제목 리스트 (생략 시 Series.name 사용)
+    """
+    html_str = ''
+    for i, s in enumerate(args):
+        # 제목 결정: names 인자 > Series.name > 인덱스 번호
+        if names and i < len(names):
+            title = names[i]
+        elif s.name is not None:
+            title = s.name
+        else:
+            title = f'Series {i}'
+        
+        table_html = s.to_frame(name=title).to_html()
+        html_str += table_html + '&nbsp;' * 4
+
+    display_html(
+        html_str.replace('table', 'table style="display:inline; vertical-align:top"'),
+        raw=True
+    )
+```
+
 ## Google Colab 셀 복사 및 붙여넣기 단축키
 
 - 🔹 셀 복사 & 붙여넣기 단축키
@@ -73,3 +141,20 @@ def display_side_by_side(*args):
 > 💡 `Ctrl + M` (`Cmd + M` on Mac)을 누른 후 해당 키를 입력하면 실행됩니다.  
 > Colab에서 셀을 빠르게 조작할 때 활용해 보세요! 🚀
 
+
+---
+
+### numpy 소수 자릿 설정
+```
+# NumPy 라이브러리를 불러오고, 배열 출력 형식을 보기 좋게 설정합니다.
+import numpy as np
+# suppress=True는 과학적 표기법(예: 1.23e-10)을 억제하고
+# 항상 고정 소수점 표기법(fixed point notation)을 사용
+np.set_printoptions(suppress=True, precision=4)
+```
+
+### pandas 소수 자릿 설정
+```Python
+pd.set_option('display.float_format', '{:.2f}'.format)  # 전역 적용
+pd.reset_option('display.float_format')                 # 초기화
+```
